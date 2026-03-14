@@ -1,19 +1,22 @@
 import json
 from pathlib import Path
-from client import Client  
+from client import Client
 
 
 class ClientCollection:
 
-    def __init__(self):
+    def __init__(self, clients=None):
 
-        base_path = Path(__file__).resolve().parent
-        file_path = base_path.parent / "data" / "clients.json"
+        if clients is not None:
+            self.clients = clients
+        else:
+            base_path = Path(__file__).resolve().parent
+            file_path = base_path.parent / "data" / "clients.json"
 
-        with open(file_path, "r", encoding="utf-8") as file:
-            data = json.load(file)
+            with open(file_path, "r", encoding="utf-8") as file:
+                data = json.load(file)
 
-        self.clients = [Client(**client) for client in data]
+            self.clients = [Client(**client) for client in data]
 
 
     def count_clients(self):
