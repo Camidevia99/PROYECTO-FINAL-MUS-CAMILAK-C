@@ -125,12 +125,17 @@ def generate_report():
 
     for client in clients:
 
-        cid = client["client_id"]
+        cid = int(client["client_id"])
 
     total_spent = sales_by_client.get(cid, 0)
 
-    new_client = client.copy()
-    new_client["total_spent"] = total_spent
+    new_client = {
+        "client_id": cid,
+        "name": client["name"],
+        "country": client["country"],
+        "signup_date": client["signup_date"],
+        "total_spent": total_spent
+    }
 
     clients_with_totals.append(new_client)
     

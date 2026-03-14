@@ -34,6 +34,16 @@ class SalesCollection:
     def sales_by_client(self, client_id):
 
         return [sale for sale in self.sales if sale.client_id == client_id]
+    
+    def total_amount_by_client(self, client_id):
+
+        total = 0
+
+        for sale in self.sales:
+         if sale.client_id == client_id:
+            total += sale.amount
+
+         return total
 
     def total_sales(self):
 
