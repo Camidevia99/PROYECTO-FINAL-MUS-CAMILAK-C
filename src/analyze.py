@@ -111,11 +111,12 @@ def generate_report():
     df["year_month"] = df["date"].dt.to_period("M")
 
     monthly_sales = (
-        df.groupby("year_month")["amount"]
-        .sum()
-        .astype(float)
-        .to_dict()
+    df.groupby("year_month")["amount"]
+    .sum()
+    .astype(float)
     )
+
+    monthly_sales = {str(k): v for k, v in monthly_sales.items()}
 
     # -------------------------
     # CLIENTES CON METRICAS
