@@ -32,7 +32,7 @@ def generate_report():
     total_clients = len(clients)
 
     # -------------------------
-    # 2 TOTAL VENTAS (count)
+    # 2 TOTAL VENTAS
     # -------------------------
     total_sales = len(sales)
 
@@ -42,7 +42,7 @@ def generate_report():
     total_revenue = sum(float(s["amount"]) for s in sales)
 
     # -------------------------
-    # 3 TOTAL POR CLIENTE
+    # CALCULOS POR CLIENTE
     # -------------------------
     sales_by_client = {}
     count_sales_by_client = {}
@@ -59,7 +59,7 @@ def generate_report():
         count_sales_by_client[cid] += 1
 
     # -------------------------
-    # 5 PROMEDIO POR CLIENTE
+    # PROMEDIO POR CLIENTE
     # -------------------------
     avg_sales_by_client = {}
 
@@ -69,12 +69,12 @@ def generate_report():
         )
 
     # -------------------------
-    # 6 CLIENTE CON MAYOR GASTO
+    # CLIENTE CON MAYOR GASTO
     # -------------------------
     max_client = max(sales_by_client, key=sales_by_client.get)
 
     # -------------------------
-    # 7 VENTAS POR CATEGORIA
+    # VENTAS POR CATEGORIA
     # -------------------------
     df = pd.read_csv(data_path / "sales.csv")
 
@@ -83,7 +83,7 @@ def generate_report():
     )
 
     # -------------------------
-    # 8 CLIENTE CON MÁS ELECTRONICS
+    # CLIENTE CON MÁS ELECTRONICS
     # -------------------------
     electronics = df[df["category"] == "Electronics"]
 
@@ -92,7 +92,7 @@ def generate_report():
     )
 
     # -------------------------
-    # 9 CLIENTES CON GASTO MINIMO
+    # CLIENTES CON GASTO MINIMO
     # -------------------------
     min_amount = 500
     clients_with_min_spending = 0
@@ -105,7 +105,7 @@ def generate_report():
             clients_with_min_spending += 1
 
     # -------------------------
-    # 10 VENTAS POR MES
+    # VENTAS POR MES
     # -------------------------
     df["date"] = pd.to_datetime(df["date"])
     df["year_month"] = df["date"].dt.to_period("M")
@@ -118,7 +118,7 @@ def generate_report():
     )
 
     # -------------------------
-    # CLIENTES CON MÉTRICAS
+    # CLIENTES CON METRICAS
     # -------------------------
     clients_with_totals = []
 
@@ -161,11 +161,19 @@ def generate_report():
             if total_spent > top_client_by_country[country]["total_spent"]:
                 top_client_by_country[country] = client
 
-    # convertir a nombre del cliente
     top_client_by_country = {
         country: data["name"]
         for country, data in top_client_by_country.items()
     }
+
+    # -------------------------
+    # CLIENTES DE ALTO GASTO
+    # -------------------------
+    high_spending_clients = [
+        client["name"]
+        for client in clients_with_totals
+        if client["total_spent"] > 500
+    ]
 
     # -------------------------
     # REPORTE FINAL
@@ -185,5 +193,6 @@ def generate_report():
         "sales_by_category": sales_by_category,
         "top_client_electronics": int(top_client),
         "monthly_sales": monthly_sales,
-        "top_client_by_country": top_client_by_country
+        "top_client_by_country": top_client_by_country,
+        "high_spending_clients": high_spending_clients
     }
