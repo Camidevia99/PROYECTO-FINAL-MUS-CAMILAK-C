@@ -5,7 +5,7 @@ from sale import Sale
 
 class SalesCollection:
 
-    def __init__(self):
+    def __init__(self, sales=None):
 
         base_path = Path(__file__).resolve().parent
         file_path = base_path.parent / "data" / "sales.csv"

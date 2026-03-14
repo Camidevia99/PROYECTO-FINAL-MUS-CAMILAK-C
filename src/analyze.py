@@ -34,7 +34,7 @@ def generate_report():
     # ---------------------------
     # 2. TOTAL VENTAS
     # ---------------------------
-    total_sales = sum(float(s["amount"]) for s in sales)
+    total_sales = len(sales)
 
     # ---------------------------
     # 3. VENTAS POR CLIENTE
