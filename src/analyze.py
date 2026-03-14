@@ -121,7 +121,19 @@ def generate_report():
     # ---------------------------
     # REPORTE FINAL
     # ---------------------------
+    clients_with_totals = []
 
+    for client in clients:
+
+        cid = client["client_id"]
+
+    total_spent = sales_by_client.get(cid, 0)
+
+    new_client = client.copy()
+    new_client["total_spent"] = total_spent
+
+    clients_with_totals.append(new_client)
+    
     return {
     "summary": {
         "total_clients": total_clients,
@@ -130,7 +142,7 @@ def generate_report():
         "max_client": max_client,
         "clients_with_min_spending": clients_with_min_spending
     },
-    "clients": clients,
+    "clients": clients_with_totals,
     "sales_by_client": sales_by_client,
     "count_sales_by_client": count_sales_by_client,
     "avg_sales_by_client": avg_sales_by_client,
