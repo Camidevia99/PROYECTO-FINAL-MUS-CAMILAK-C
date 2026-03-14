@@ -93,19 +93,22 @@ def generate_report():
 
         cid = int(client["client_id"])
 
-        total_spent = sales_by_client.get(cid, 0)
-        sale_count = count_sales_by_client.get(cid, 0)
+    total_spent = sales_by_client.get(cid, 0)
+    sale_count = count_sales_by_client.get(cid, 0)
 
-        new_client = {
-            "client_id": cid,
-            "name": client["name"],
-            "country": client["country"],
-            "signup_date": client["signup_date"],
-            "total_spent": total_spent,
-            "sale_count": sale_count
-        }
+    average_sale = round(total_spent / sale_count, 2) if sale_count > 0 else 0
 
-        clients_with_totals.append(new_client)
+    new_client = {
+        "client_id": cid,
+        "name": client["name"],
+        "country": client["country"],
+        "signup_date": client["signup_date"],
+        "total_spent": total_spent,
+        "sale_count": sale_count,
+        "average_sale": average_sale
+    }
+
+    clients_with_totals.append(new_client)
 
     return {
         "summary": {
