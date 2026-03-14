@@ -26,32 +26,24 @@ def generate_report():
     clients = load_clients()
     sales = load_sales()
 
-    # 1️⃣ TOTAL CLIENTES
     total_clients = len(clients)
-
-    # 2️⃣ TOTAL VENTAS (numero de ventas)
     total_sales = len(sales)
 
-    # TOTAL INGRESOS
     total_revenue = sum(float(s["amount"]) for s in sales)
 
-    # 3️⃣ VENTAS POR CLIENTE
     sales_by_client = {}
-
-    for sale in sales:
-        cid = int(sale["client_id"])
-        sales_by_client.setdefault(cid, 0)
-        sales_by_client[cid] += float(sale["amount"])
-
-    # 4️⃣ NUMERO DE VENTAS POR CLIENTE
     count_sales_by_client = {}
 
     for sale in sales:
+
         cid = int(sale["client_id"])
+
+        sales_by_client.setdefault(cid, 0)
+        sales_by_client[cid] += float(sale["amount"])
+
         count_sales_by_client.setdefault(cid, 0)
         count_sales_by_client[cid] += 1
 
-    # 5️⃣ PROMEDIO POR CLIENTE
     avg_sales_by_client = {}
 
     for cid in sales_by_client:
@@ -59,24 +51,20 @@ def generate_report():
             sales_by_client[cid] / count_sales_by_client[cid]
         )
 
-    # 6️⃣ CLIENTE CON MAYOR GASTO
     max_client = max(sales_by_client, key=sales_by_client.get)
 
-    # 7️⃣ VENTAS POR CATEGORIA
     df = pd.read_csv(data_path / "sales.csv")
 
     sales_by_category = (
         df.groupby("category")["amount"].sum().to_dict()
     )
 
-    # 8️⃣ CLIENTE CON MAS ELECTRONICS
     electronics = df[df["category"] == "Electronics"]
 
     top_client = (
         electronics.groupby("client_id")["amount"].sum().idxmax()
     )
 
-    # 9️⃣ CLIENTES CON GASTO MINIMO
     min_amount = 500
     clients_with_min_spending = 0
 
@@ -89,9 +77,7 @@ def generate_report():
         if total > min_amount:
             clients_with_min_spending += 1
 
-    # 🔟 VENTAS MES A MES
     df["date"] = pd.to_datetime(df["date"])
-
     df["year_month"] = df["date"].dt.to_period("M")
 
     monthly_sales = (
@@ -101,7 +87,6 @@ def generate_report():
         .to_dict()
     )
 
-    # CLIENTES CON TOTAL SPENT (IMPORTANTE PARA TEST)
     clients_with_totals = []
 
     for client in clients:
@@ -109,13 +94,15 @@ def generate_report():
         cid = int(client["client_id"])
 
         total_spent = sales_by_client.get(cid, 0)
+        sale_count = count_sales_by_client.get(cid, 0)
 
         new_client = {
             "client_id": cid,
             "name": client["name"],
             "country": client["country"],
             "signup_date": client["signup_date"],
-            "total_spent": total_spent
+            "total_spent": total_spent,
+            "sale_count": sale_count
         }
 
         clients_with_totals.append(new_client)
