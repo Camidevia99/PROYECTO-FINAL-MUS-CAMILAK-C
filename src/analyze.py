@@ -157,13 +157,13 @@ def generate_report():
 
         if country not in top_client_by_country:
             top_client_by_country[country] = client
-
         else:
             if total_spent > top_client_by_country[country]["total_spent"]:
                 top_client_by_country[country] = client
 
+    # convertir a nombre del cliente
     top_client_by_country = {
-        country: data["client_id"]
+        country: data["name"]
         for country, data in top_client_by_country.items()
     }
 
