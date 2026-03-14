@@ -35,7 +35,8 @@ def generate_report():
     # 2. TOTAL VENTAS
     # ---------------------------
     total_sales = len(sales)
-
+    # TOTAL INGRESOS (dinero total)
+    total_revenue = sum(float(s["amount"]) for s in sales)  
     # ---------------------------
     # 3. VENTAS POR CLIENTE
     # ---------------------------
@@ -122,18 +123,20 @@ def generate_report():
     # ---------------------------
 
     return {
-        "summary": {
-            "total_clients": total_clients,
-            "total_sales": total_sales,
-            "max_client": max_client,
-            "clients_with_min_spending": clients_with_min_spending
-        },
-        "sales_by_client": sales_by_client,
-        "count_sales_by_client": count_sales_by_client,
-        "avg_sales_by_client": avg_sales_by_client,
-        "sales_by_category": sales_by_category,
-        "top_client_electronics": int(top_client),
-        "monthly_sales": monthly_sales
-    }
+    "summary": {
+        "total_clients": total_clients,
+        "total_sales": total_sales,
+        "total_revenue": total_revenue,
+        "max_client": max_client,
+        "clients_with_min_spending": clients_with_min_spending
+    },
+    "clients": clients,
+    "sales_by_client": sales_by_client,
+    "count_sales_by_client": count_sales_by_client,
+    "avg_sales_by_client": avg_sales_by_client,
+    "sales_by_category": sales_by_category,
+    "top_client_electronics": int(top_client),
+    "monthly_sales": monthly_sales
+}
 
 
