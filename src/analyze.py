@@ -108,7 +108,6 @@ def generate_report():
     # 10 VENTAS POR MES
     # -------------------------
     df["date"] = pd.to_datetime(df["date"])
-
     df["year_month"] = df["date"].dt.to_period("M")
 
     monthly_sales = (
@@ -147,6 +146,28 @@ def generate_report():
         clients_with_totals.append(new_client)
 
     # -------------------------
+    # CLIENTE TOP POR PAÍS
+    # -------------------------
+    top_client_by_country = {}
+
+    for client in clients_with_totals:
+
+        country = client["country"]
+        total_spent = client["total_spent"]
+
+        if country not in top_client_by_country:
+            top_client_by_country[country] = client
+
+        else:
+            if total_spent > top_client_by_country[country]["total_spent"]:
+                top_client_by_country[country] = client
+
+    top_client_by_country = {
+        country: data["client_id"]
+        for country, data in top_client_by_country.items()
+    }
+
+    # -------------------------
     # REPORTE FINAL
     # -------------------------
     return {
@@ -163,5 +184,6 @@ def generate_report():
         "avg_sales_by_client": avg_sales_by_client,
         "sales_by_category": sales_by_category,
         "top_client_electronics": int(top_client),
-        "monthly_sales": monthly_sales
+        "monthly_sales": monthly_sales,
+        "top_client_by_country": top_client_by_country
     }
